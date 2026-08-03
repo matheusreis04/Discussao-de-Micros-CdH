@@ -96,11 +96,19 @@ int main(void) {
 
         // Nessa linha eu não vejo necessidade de nos aprofundarmos, pois, basicamente, estamos programando em
         // assembly, o que não é o intuito da aula. É válido citar também que nem mesmo o próprio arduino
-        // faz o delay dessa forma. O intuito aqui é ilustrar o que o delay (função bloqueante)faz e apresentar
+        // faz o delay dessa forma. O intuito aqui é ilustrar o que o delay (função bloqueante) faz e apresentar
         // um pouco da linguagem da máquina, podendo discutir também sobre o clock e seus ciclos.
-          
+        // 
+        // A instrução do no operation (nop) faz o que o próprio nome sugere, utilizando um ciclo de clock para
+        // não executar nada, com isso, simulamos o comportamento do delay() que, recebendo o valor em microssegundos,
+        // passa um tempo parado.
+        // 
+        // E por que fazer isso por 2285714 ciclos?
+        // No caso, o nosso microcontrolador opera em uma taxa de 16MHz, ou de 16.000.000 ciclos por segundo e, diferente
+        // do que esperamos, utilizar um laço com contador e comparação, além da própria instrução nop, se utiliza de 7
+        // ciclos, não somente um. Portanto, para que possamos ter um delay de 1s, fazemo 16*10⁶/7 = 2285714 
         for (uint32_t i = 0; i < 2285714UL; i++) {
-        __asm__ __volatile__ ("nop\n\t");
+            __asm__ __volatile__ ("nop\n\t");
         }
     }
 
